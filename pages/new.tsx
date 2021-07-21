@@ -4,15 +4,13 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Layout from '../src/components/layout'
-import axios from '../src/axios'
+import Layout from 'src/components/layout';
+import axios from 'src/axios';
 import { useAsync } from 'react-async';
+import { Post } from 'src/models/post';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -23,42 +21,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const validationSchema = yup.object({
-  email: yup
-    .string('Enter your email')
-    .email('Enter a valid email')
-    .required('Email is required'),
-  title: yup
-    .string()
-    .required('Title is required'),
-  description: yup
-    .string()
-    .required('Author is required'),
+  email: yup.string().email('Enter a valid email').required('Email is required'),
+  title: yup.string().required('Title is required'),
+  description: yup.string().required('Author is required'),
 });
 
 export default function NewPostPage() {
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
+      id: '',
       email: '',
       title: '',
       description: '',
-      published_date: new Date()
+      published_date: new Date(),
     },
     validationSchema: validationSchema,
     onSubmit,
   });
   const submitForm = useAsync({
     deferFn([data]) {
-      return axios.post('/posts', data)
+      return axios.post('/posts', data);
     },
     onReject() {
-      alert('Network error!!!')
+      alert('Network error!!!');
     },
     onResolve() {
-      formik.resetForm()
-      alert('Post succesfully added')
-    }
-  })
+      formik.resetForm();
+      alert('Post succesfully added');
+    },
+  });
   return (
     <Layout title="New Post">
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -70,7 +62,7 @@ export default function NewPostPage() {
             fullWidth
             label="Title"
             name="title"
-            id='title'
+            id="title"
             value={formik.values.title}
             onChange={formik.handleChange}
             error={formik.touched.title && Boolean(formik.errors.title)}
@@ -114,21 +106,15 @@ export default function NewPostPage() {
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
-            id='published_date'
-            name='published_date'
+            id="published_date"
+            name="published_date"
             autoOk
             onChange={(value) => formik.setFieldValue('published_date', value)}
             value={formik.values.published_date}
             error={formik.touched.published_date && Boolean(formik.errors.published_date)}
             helperText={formik.touched.published_date && formik.errors.published_date}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
+          <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             Submit
           </Button>
         </form>
@@ -136,7 +122,7 @@ export default function NewPostPage() {
     </Layout>
   );
 
-  function onSubmit(values) {
-    return submitForm.run(values)
+  function onSubmit(values: Post) {
+    return submitForm.run(values);
   }
 }

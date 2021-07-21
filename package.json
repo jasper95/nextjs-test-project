@@ -11,7 +11,6 @@
     "clsx": "latest",
     "date-fns": "^2.22.1",
     "dayjs": "^1.10.6",
-    "express": "^4.17.1",
     "formik": "^2.2.9",
     "next": "latest",
     "prop-types": "latest",
@@ -23,9 +22,20 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "dev": "node server.js",
+    "lint": "next lint",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
     "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.14",
+    "@types/uuid": "^8.3.1",
+    "eslint": "7.31.0",
+    "eslint-config-next": "11.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "prettier": "^2.3.2",
+    "typescript": "4.3.5"
   }
 }
